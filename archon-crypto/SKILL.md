@@ -36,7 +36,7 @@ Provides cryptographic operations using Archon DIDs:
 
 **Document Signing:**
 ```bash
-# Sign a document
+# Sign a document (modifies in place)
 ./sign-file.sh contract.json
 # Others verify your signature
 ./verify-file.sh contract.json
@@ -44,7 +44,7 @@ Provides cryptographic operations using Archon DIDs:
 
 **Code/Release Signing:**
 ```bash
-# Sign manifest of repository/release
+# Sign manifest of repository/release (modifies in place)
 ./sign-file.sh manifest.json
 # Users verify it came from you
 ./verify-file.sh manifest.json

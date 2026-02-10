@@ -1,22 +1,21 @@
 #!/bin/bash
-# Sign a JSON file with your DID
-# Usage: ./sign-file.sh <file> [output-file]
+# Sign a JSON file with your DID (modifies file in place)
+# Usage: ./sign-file.sh <file>
 
 set -e
 
 if [ $# -lt 1 ]; then
-    echo "Usage: $0 <file> [output-file]"
+    echo "Usage: $0 <file>"
     echo ""
     echo "Examples:"
-    echo "  $0 manifest.json                    # Outputs to manifest.signed.json"
-    echo "  $0 contract.json signed.json        # Outputs to signed.json"
+    echo "  $0 manifest.json"
+    echo "  $0 contract.json"
     echo ""
-    echo "Note: File must be valid JSON."
+    echo "Note: File must be valid JSON. Signature is added in place."
     exit 1
 fi
 
 FILE="$1"
-OUTPUT="${2:-${FILE%.json}.signed.json}"
 
 # Check file exists
 if [ ! -f "$FILE" ]; then
@@ -39,20 +38,22 @@ else
 fi
 
 echo "Signing: $FILE"
-echo "Output: $OUTPUT"
 echo ""
 
-# Sign file (outputs to stdout, we redirect)
+# Create temp file for safety
+TEMP_FILE="${FILE}.signing.tmp"
+
+# Sign file (outputs to stdout)
 cd ~/clawd
-if npx @didcid/keymaster sign-file "$FILE" > "$OUTPUT" 2>&1; then
-    echo "✓ File signed"
-    echo ""
-    echo "Signed file: $OUTPUT"
+if npx @didcid/keymaster sign-file "$FILE" > "$TEMP_FILE" 2>&1; then
+    # Replace original with signed version
+    mv "$TEMP_FILE" "$FILE"
+    echo "✓ File signed (signature added in place)"
     echo ""
     echo "Others can verify with:"
-    echo "  ./verify-file.sh $OUTPUT"
+    echo "  ./verify-file.sh $FILE"
 else
     echo "✗ Signing failed"
-    rm -f "$OUTPUT"
+    rm -f "$TEMP_FILE"
     exit 1
 fi
