@@ -118,8 +118,18 @@ This script:
 
 ### Restore from Backup
 
-If you need to recover your data:
+**Using the restore script (recommended):**
+```bash
+./scripts/restore-from-vault.sh
+```
 
+This script:
+- Lists available backups in your vault
+- Downloads and extracts workspace.zip, config.zip, hexmem.db
+- Places files in a timestamped restore directory
+- Shows commands to move files to their final locations
+
+**Manual restore:**
 ```bash
 # Retrieve files
 npx @didcid/keymaster get-vault-item backup workspace.zip workspace.zip
