@@ -19,8 +19,13 @@ Send and receive encrypted messages (dmail) between DIDs. Messages are end-to-en
 source ~/.archon.env
 export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
 
-# Send a message
+# Send a simple message
 ./scripts/send.sh "did:cid:recipient..." "Subject line" "Message body"
+
+# Or compose with attachments
+./scripts/compose.sh "did:cid:recipient..." "Subject" "Body"  # Returns dmail DID
+./scripts/attach.sh <dmail-did> document.pdf
+./scripts/send-composed.sh <dmail-did>
 
 # Check for new messages
 ./scripts/refresh.sh
@@ -34,13 +39,13 @@ export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
 
 ## Scripts
 
-### send.sh - Send a Message
+### send.sh - Send a Message (Quick)
 
 ```bash
 ./scripts/send.sh <recipient-did> <subject> <body> [cc-did...]
 ```
 
-Creates and sends an encrypted message. Returns the notice DID.
+Creates and sends an encrypted message in one step. Returns the dmail DID.
 
 **Examples:**
 ```bash
@@ -50,6 +55,35 @@ Creates and sends an encrypted message. Returns the notice DID.
 # With CC
 ./scripts/send.sh "did:cid:alice..." "Meeting" "Let's sync up" "did:cid:bob..."
 ```
+
+### compose.sh - Create Draft (for attachments)
+
+```bash
+./scripts/compose.sh <recipient-did> <subject> <body> [cc-did...]
+```
+
+Creates a dmail without sending it. Use this when you need to add attachments before sending.
+
+**Workflow:**
+```bash
+# 1. Create the draft
+DMAIL=$(./scripts/compose.sh "did:cid:alice..." "Report" "See attached")
+
+# 2. Add attachments
+./scripts/attach.sh "$DMAIL" report.pdf
+./scripts/attach.sh "$DMAIL" data.csv
+
+# 3. Send when ready
+./scripts/send-composed.sh "$DMAIL"
+```
+
+### send-composed.sh - Send a Draft
+
+```bash
+./scripts/send-composed.sh <dmail-did>
+```
+
+Sends a previously composed dmail (created with compose.sh).
 
 ### list.sh - List Messages
 
