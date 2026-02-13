@@ -118,8 +118,18 @@ This script:
 
 ### Restore from Backup
 
-If you need to recover your data:
+**Using the restore script (recommended):**
+```bash
+./scripts/restore-from-vault.sh
+```
 
+This script:
+- Lists available backups in your vault
+- Downloads and extracts workspace.zip, config.zip, hexmem.db
+- Places files in a timestamped restore directory
+- Shows commands to move files to their final locations
+
+**Manual restore:**
 ```bash
 # Retrieve files
 npx @didcid/keymaster get-vault-item backup workspace.zip workspace.zip
@@ -131,18 +141,26 @@ unzip workspace.zip
 unzip config.zip -d ~/.openclaw
 ```
 
-### Complete Recovery (from mnemonic)
+### Complete Recovery (from mnemonic only)
 
-If you've lost everything:
+If you've lost everything and only have your 12-word mnemonic:
 
 ```bash
-# 1. Restore wallet from mnemonic
+./scripts/disaster-recovery.sh "word1 word2 ... word12" [target-dir]
+```
+
+This single command:
+1. Creates wallet from mnemonic
+2. Recovers wallet data (identities, aliases) from seed bank
+3. Restores workspace, config, and memory from vault
+
+The seed bank stores an encrypted copy of your wallet (including the backup vault alias), so you can recover everything from just the mnemonic.
+
+**Manual steps (if preferred):**
+```bash
 npx @didcid/keymaster import-wallet "word1 word2 ... word12"
-
-# 2. Recover wallet DID from seed bank
 npx @didcid/keymaster recover-wallet-did
-
-# 3. Retrieve backups (as above)
+./scripts/restore-from-vault.sh
 ```
 
 ## Backup Contents
