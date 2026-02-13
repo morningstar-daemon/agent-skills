@@ -28,7 +28,7 @@ Comprehensive toolkit for Archon decentralized identities (DIDs). Manages identi
 ### First-Time Setup
 
 ```bash
-./scripts/create-id.sh
+./scripts/identity/create-id.sh
 ```
 
 Creates your first DID, generates passphrase, saves to `~/.archon.env`. **Write down your 12-word mnemonic** - it's your master recovery key.
@@ -47,7 +47,7 @@ export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
 ### Create Additional Identity
 
 ```bash
-./scripts/create-additional-id.sh <name>
+./scripts/identity/create-additional-id.sh <name>
 ```
 
 Create pseudonymous personas or role-separated identities (all share same mnemonic).
@@ -55,13 +55,13 @@ Create pseudonymous personas or role-separated identities (all share same mnemon
 ### List All DIDs
 
 ```bash
-./scripts/list-ids.sh
+./scripts/identity/list-ids.sh
 ```
 
 ### Switch Active Identity
 
 ```bash
-./scripts/switch-id.sh <name>
+./scripts/identity/switch-id.sh <name>
 ```
 
 ### Recovery
@@ -79,43 +79,43 @@ End-to-end encrypted messages between DIDs with attachment support.
 ### Send Message
 
 ```bash
-./scripts/send.sh <recipient-did-or-alias> <subject> <body> [cc-did...]
+./scripts/messaging/send.sh <recipient-did-or-alias> <subject> <body> [cc-did...]
 ```
 
 Examples:
 ```bash
-./scripts/send.sh alice "Meeting" "Let's sync tomorrow"
-./scripts/send.sh did:cid:bag... "Update" "Status report" did:cid:bob...
+./scripts/messaging/send.sh alice "Meeting" "Let's sync tomorrow"
+./scripts/messaging/send.sh did:cid:bag... "Update" "Status report" did:cid:bob...
 ```
 
 ### Check Inbox
 
 ```bash
-./scripts/refresh.sh   # Poll for new messages
-./scripts/list.sh      # List inbox
-./scripts/list.sh unread  # Filter unread
+./scripts/messaging/refresh.sh   # Poll for new messages
+./scripts/messaging/list.sh      # List inbox
+./scripts/messaging/list.sh unread  # Filter unread
 ```
 
 ### Read Message
 
 ```bash
-./scripts/read.sh <dmail-did>
+./scripts/messaging/read.sh <dmail-did>
 ```
 
 ### Reply/Forward/Archive
 
 ```bash
-./scripts/reply.sh <dmail-did> <body>
-./scripts/forward.sh <dmail-did> <recipient-did> [body]
-./scripts/archive.sh <dmail-did>
-./scripts/delete.sh <dmail-did>
+./scripts/messaging/reply.sh <dmail-did> <body>
+./scripts/messaging/forward.sh <dmail-did> <recipient-did> [body]
+./scripts/messaging/archive.sh <dmail-did>
+./scripts/messaging/delete.sh <dmail-did>
 ```
 
 ### Attachments
 
 ```bash
-./scripts/attach.sh <dmail-did> <file-path>
-./scripts/get-attachment.sh <dmail-did> <attachment-name> <output-path>
+./scripts/messaging/attach.sh <dmail-did> <file-path>
+./scripts/messaging/get-attachment.sh <dmail-did> <attachment-name> <output-path>
 ```
 
 ## Nostr Integration
@@ -132,7 +132,7 @@ curl -sSL https://raw.githubusercontent.com/fiatjaf/nak/master/install.sh | sh
 ### Derive Nostr Keys
 
 ```bash
-./scripts/derive-nostr.sh
+./scripts/nostr/derive-nostr.sh
 ```
 
 Outputs `nsec`, `npub`, and hex pubkey (derived from `m/44'/0'/0'/0/0`).
@@ -167,8 +167,8 @@ npx @didcid/keymaster set-property YourIdName nostr \
 ### Encrypt Files
 
 ```bash
-./scripts/encrypt-file.sh <input-file> <recipient-did-or-alias>
-./scripts/encrypt-message.sh <message> <recipient-did-or-alias>
+./scripts/crypto/encrypt-file.sh <input-file> <recipient-did-or-alias>
+./scripts/crypto/encrypt-message.sh <message> <recipient-did-or-alias>
 ```
 
 Returns encrypted DID (stored on-chain/IPFS). Only recipient can decrypt.
@@ -176,14 +176,14 @@ Returns encrypted DID (stored on-chain/IPFS). Only recipient can decrypt.
 ### Decrypt Files
 
 ```bash
-./scripts/decrypt-file.sh <encrypted-did> <output-file>
-./scripts/decrypt-message.sh <encrypted-did>
+./scripts/crypto/decrypt-file.sh <encrypted-did> <output-file>
+./scripts/crypto/decrypt-message.sh <encrypted-did>
 ```
 
 ### Sign Files (Proof of Authorship)
 
 ```bash
-./scripts/sign-file.sh <file.json>
+./scripts/crypto/sign-file.sh <file.json>
 ```
 
 **Important:** File must be JSON. Adds `proof` section with signature.
@@ -191,7 +191,7 @@ Returns encrypted DID (stored on-chain/IPFS). Only recipient can decrypt.
 ### Verify Signatures
 
 ```bash
-./scripts/verify-file.sh <file.json>
+./scripts/crypto/verify-file.sh <file.json>
 ```
 
 Shows who signed it, when, and whether content was tampered with.
@@ -203,20 +203,20 @@ Friendly names for DIDs - use "alice" instead of `did:cid:bagaaiera...`
 ### Add Alias
 
 ```bash
-./scripts/add-alias.sh <alias> <did>
+./scripts/aliases/add-alias.sh <alias> <did>
 ```
 
 Examples:
 ```bash
-./scripts/add-alias.sh alice did:cid:bagaaiera...
-./scripts/add-alias.sh proof-of-human-schema did:cid:bagaaiera4yl4xi...
-./scripts/add-alias.sh backup-vault did:cid:bagaaierab...
+./scripts/aliases/add-alias.sh alice did:cid:bagaaiera...
+./scripts/aliases/add-alias.sh proof-of-human-schema did:cid:bagaaiera4yl4xi...
+./scripts/aliases/add-alias.sh backup-vault did:cid:bagaaierab...
 ```
 
 ### Resolve Alias
 
 ```bash
-./scripts/resolve-did.sh <alias-or-did>
+./scripts/aliases/resolve-did.sh <alias-or-did>
 ```
 
 Pass-through safe (returns DID unchanged if you pass a DID).
@@ -224,8 +224,8 @@ Pass-through safe (returns DID unchanged if you pass a DID).
 ### List/Remove Aliases
 
 ```bash
-./scripts/list-aliases.sh
-./scripts/remove-alias.sh <alias>
+./scripts/aliases/list-aliases.sh
+./scripts/aliases/remove-alias.sh <alias>
 ```
 
 **Note:** Aliases work in most Keymaster commands and all encryption/messaging scripts.
@@ -249,13 +249,13 @@ Encrypted, distributed backups to your DID vault.
 
 3. Test backup:
    ```bash
-   ./scripts/backup-to-vault.sh
+   ./scripts/backup/backup-to-vault.sh
    ```
 
 ### Manual Backup
 
 ```bash
-./scripts/backup-to-vault.sh
+./scripts/backup/backup-to-vault.sh
 ```
 
 Backs up:
@@ -267,7 +267,7 @@ Backs up:
 
 ```bash
 npx @didcid/keymaster list-vault-items backup
-./scripts/verify-backup.sh  # Full integrity check
+./scripts/backup/verify-backup.sh  # Full integrity check
 ```
 
 ### Restore from Backup
@@ -298,9 +298,9 @@ export ARCHON_GATEKEEPER_URL="http://localhost:4224"
 ### Multiple Identities (Pseudonymous Personas)
 
 ```bash
-./scripts/create-additional-id.sh pseudonym
-./scripts/create-additional-id.sh work-persona
-./scripts/switch-id.sh pseudonym
+./scripts/identity/create-additional-id.sh pseudonym
+./scripts/identity/create-additional-id.sh work-persona
+./scripts/identity/switch-id.sh pseudonym
 ```
 
 Use cases:
@@ -381,7 +381,7 @@ chmod 600 ~/.archon.env
 
 **"Messages not arriving":**
 ```bash
-./scripts/refresh.sh  # Poll for new messages
+./scripts/messaging/refresh.sh  # Poll for new messages
 ```
 
 **"Recipient can't decrypt":**
