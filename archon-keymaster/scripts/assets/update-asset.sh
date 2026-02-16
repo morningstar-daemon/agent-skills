@@ -11,8 +11,5 @@ fi
 
 ASSET_DID="$1"
 JSON_DATA="$2"
-KEYMASTER_URL="${KEYMASTER_URL:-http://localhost:4226}"
 
-curl -s -X PUT "${KEYMASTER_URL}/api/v1/assets/${ASSET_DID}" \
-    -H "Content-Type: application/json" \
-    -d "$JSON_DATA"
+npx @didcid/keymaster update-asset "$ASSET_DID" "$JSON_DATA"

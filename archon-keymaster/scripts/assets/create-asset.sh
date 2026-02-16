@@ -10,8 +10,5 @@ if [ $# -lt 1 ]; then
 fi
 
 JSON_DATA="$1"
-KEYMASTER_URL="${KEYMASTER_URL:-http://localhost:4226}"
 
-curl -s -X POST "${KEYMASTER_URL}/api/v1/assets" \
-    -H "Content-Type: application/json" \
-    -d "$JSON_DATA" | jq -r '.did'
+npx @didcid/keymaster create-asset "$JSON_DATA"

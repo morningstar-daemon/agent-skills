@@ -17,8 +17,4 @@ if [ ! -f "$JSON_FILE" ]; then
     exit 1
 fi
 
-KEYMASTER_URL="${KEYMASTER_URL:-http://localhost:4226}"
-
-curl -s -X PUT "${KEYMASTER_URL}/api/v1/assets/${ASSET_DID}" \
-    -H "Content-Type: application/json" \
-    -d @"$JSON_FILE"
+npx @didcid/keymaster update-asset-json "$ASSET_DID" "$JSON_FILE"

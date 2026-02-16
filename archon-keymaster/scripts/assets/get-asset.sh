@@ -10,6 +10,5 @@ if [ $# -lt 1 ]; then
 fi
 
 ASSET_DID="$1"
-KEYMASTER_URL="${KEYMASTER_URL:-http://localhost:4226}"
 
-curl -s "${KEYMASTER_URL}/api/v1/assets/${ASSET_DID}"
+npx @didcid/keymaster get-asset "$ASSET_DID"

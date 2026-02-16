@@ -16,8 +16,4 @@ if [ ! -f "$JSON_FILE" ]; then
     exit 1
 fi
 
-KEYMASTER_URL="${KEYMASTER_URL:-http://localhost:4226}"
-
-curl -s -X POST "${KEYMASTER_URL}/api/v1/assets" \
-    -H "Content-Type: application/json" \
-    -d @"$JSON_FILE" | jq -r '.did'
+npx @didcid/keymaster create-asset-json "$JSON_FILE"

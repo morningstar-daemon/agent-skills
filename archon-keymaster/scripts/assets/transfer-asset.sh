@@ -11,8 +11,5 @@ fi
 
 ASSET_DID="$1"
 RECIPIENT_DID="$2"
-KEYMASTER_URL="${KEYMASTER_URL:-http://localhost:4226}"
 
-curl -s -X POST "${KEYMASTER_URL}/api/v1/assets/${ASSET_DID}/transfer" \
-    -H "Content-Type: application/json" \
-    -d "{\"to\":\"${RECIPIENT_DID}\"}"
+npx @didcid/keymaster transfer-asset "$ASSET_DID" "$RECIPIENT_DID"
