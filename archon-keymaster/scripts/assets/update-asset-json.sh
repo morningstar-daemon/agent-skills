@@ -3,6 +3,21 @@
 # Usage: update-asset-json.sh <asset-did> <json-file>
 # Example: update-asset-json.sh did:cid:bagaaiera... updated.json
 
+set -e
+
+# Ensure environment is loaded
+if [ -z "$ARCHON_PASSPHRASE" ]; then
+    if [ -f ~/.archon.env ]; then
+        source ~/.archon.env
+    else
+        echo "Error: ARCHON_PASSPHRASE not set. Run create-id.sh first."
+        exit 1
+    fi
+fi
+
+# Set wallet path
+export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
+
 if [ $# -lt 2 ]; then
     echo "Usage: $0 <asset-did> <json-file>"
     echo "Example: $0 did:cid:bagaaiera... updated.json"
@@ -17,4 +32,5 @@ if [ ! -f "$JSON_FILE" ]; then
     exit 1
 fi
 
+# Update asset from JSON file
 npx @didcid/keymaster update-asset-json "$ASSET_DID" "$JSON_FILE"

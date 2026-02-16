@@ -3,6 +3,21 @@
 # Usage: create-asset-json.sh <json-file>
 # Example: create-asset-json.sh document.json
 
+set -e
+
+# Ensure environment is loaded
+if [ -z "$ARCHON_PASSPHRASE" ]; then
+    if [ -f ~/.archon.env ]; then
+        source ~/.archon.env
+    else
+        echo "Error: ARCHON_PASSPHRASE not set. Run create-id.sh first."
+        exit 1
+    fi
+fi
+
+# Set wallet path
+export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
+
 if [ $# -lt 1 ]; then
     echo "Usage: $0 <json-file>"
     echo "Example: $0 document.json"
@@ -16,4 +31,5 @@ if [ ! -f "$JSON_FILE" ]; then
     exit 1
 fi
 
+# Create asset from JSON file
 npx @didcid/keymaster create-asset-json "$JSON_FILE"

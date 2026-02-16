@@ -3,6 +3,21 @@
 # Usage: create-asset-image.sh <image-path>
 # Example: create-asset-image.sh avatar.png
 
+set -e
+
+# Ensure environment is loaded
+if [ -z "$ARCHON_PASSPHRASE" ]; then
+    if [ -f ~/.archon.env ]; then
+        source ~/.archon.env
+    else
+        echo "Error: ARCHON_PASSPHRASE not set. Run create-id.sh first."
+        exit 1
+    fi
+fi
+
+# Set wallet path
+export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
+
 if [ $# -lt 1 ]; then
     echo "Usage: $0 <image-path>"
     echo "Example: $0 avatar.png"
@@ -16,4 +31,5 @@ if [ ! -f "$IMAGE_PATH" ]; then
     exit 1
 fi
 
+# Create asset from image
 npx @didcid/keymaster create-asset-image "$IMAGE_PATH"
