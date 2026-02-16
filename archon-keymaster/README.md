@@ -267,7 +267,6 @@ All scripts wrap the [@didcid/keymaster](https://github.com/archetech/archon/tre
 - 🔜 Permission manifests (skill execution policies)
 - 🔜 Delegation (temporary permissions without sharing keys)
 - 🔜 Multi-signature credentials (require N of M issuers)
-- 🔜 Revocation registries (check credential validity)
 
 ## Contributing
 
