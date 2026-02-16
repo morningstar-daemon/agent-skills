@@ -12,6 +12,7 @@ Own your identity. Sign your work. Encrypt your messages. Prove your claims. All
 - 🔐 **End-to-end encrypted messaging** - Send messages only you and your recipient can read
 - ✍️ **Digital signatures** - Prove you created something without revealing your private key
 - 🎟️ **Verifiable credentials** - Issue and verify claims (reputation, permissions, attestations)
+- 📦 **Asset management** - Store and retrieve files, images, documents in the distributed registry
 - 🗄️ **Encrypted vaults** - Distributed backup with multi-party access control
 - 🔑 **Nostr integration** - Same identity across decentralized social networks
 
@@ -266,7 +267,6 @@ All scripts wrap the [@didcid/keymaster](https://github.com/archetech/archon/tre
 - 🔜 Permission manifests (skill execution policies)
 - 🔜 Delegation (temporary permissions without sharing keys)
 - 🔜 Multi-signature credentials (require N of M issuers)
-- 🔜 Revocation registries (check credential validity)
 
 ## Contributing
 

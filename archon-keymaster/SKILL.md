@@ -432,6 +432,124 @@ Pass-through safe (returns DID unchanged if you pass a DID).
 
 **Note:** Aliases work in most Keymaster commands and all encryption/messaging scripts.
 
+## Asset Management
+
+Store and retrieve assets (files, images, documents, JSON data) in the distributed registry. Assets are content-addressed (DIDs) and support binary data via base64 encoding.
+
+### List Assets
+
+```bash
+./scripts/assets/list-assets.sh
+```
+
+Lists all asset DIDs in the registry.
+
+### Create Assets
+
+#### From JSON Data (inline)
+
+```bash
+./scripts/assets/create-asset.sh '{"type":"document","title":"My Doc","content":"..."}'
+```
+
+#### From JSON File
+
+```bash
+./scripts/assets/create-asset-json.sh document.json
+```
+
+#### From File (any type)
+
+```bash
+./scripts/assets/create-asset-file.sh document.pdf application/pdf
+```
+
+Encodes file as base64 with metadata (filename, content-type).
+
+#### From Image
+
+```bash
+./scripts/assets/create-asset-image.sh avatar.png
+```
+
+Auto-detects image type (png/jpg/gif/webp/svg) and encodes with metadata.
+
+### Retrieve Assets
+
+#### Get Asset (raw JSON)
+
+```bash
+./scripts/assets/get-asset.sh did:cid:bagaaiera...
+```
+
+Returns raw asset data.
+
+#### Get Asset as JSON
+
+```bash
+./scripts/assets/get-asset-json.sh did:cid:bagaaiera...
+```
+
+Pretty-prints asset data.
+
+#### Get File Asset
+
+```bash
+./scripts/assets/get-asset-file.sh did:cid:bagaaiera... [output-path]
+```
+
+Decodes base64 and saves to disk. Auto-detects filename if no output path provided.
+
+#### Get Image Asset
+
+```bash
+./scripts/assets/get-asset-image.sh did:cid:bagaaiera... [output-path]
+```
+
+Decodes base64 and saves image. Auto-detects filename if no output path provided.
+
+### Update Assets
+
+#### Update with JSON Data
+
+```bash
+./scripts/assets/update-asset.sh did:cid:bagaaiera... '{"updated":true}'
+```
+
+#### Update with JSON File
+
+```bash
+./scripts/assets/update-asset-json.sh did:cid:bagaaiera... updated.json
+```
+
+#### Update with File
+
+```bash
+./scripts/assets/update-asset-file.sh did:cid:bagaaiera... newdoc.pdf application/pdf
+```
+
+#### Update with Image
+
+```bash
+./scripts/assets/update-asset-image.sh did:cid:bagaaiera... newavatar.png
+```
+
+### Transfer Assets
+
+```bash
+./scripts/assets/transfer-asset.sh did:cid:bagaaiera... did:cid:bagaaierat...
+```
+
+Transfer asset ownership to another DID.
+
+### Use Cases
+
+- **Skill Packages**: Store SKILL.md + scripts as signed assets
+- **Profile Media**: Avatar images, banners
+- **Documents**: PDFs, markdown files, archives
+- **Data Sets**: JSON datasets, configuration files
+- **Shared Resources**: Transfer assets between DIDs for collaboration
+
 ## Vault Management
 
 Low-level vault operations for managing encrypted distributed storage.
