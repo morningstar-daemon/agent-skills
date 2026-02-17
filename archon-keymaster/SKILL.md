@@ -1,6 +1,6 @@
 ---
 name: archon-keymaster
-description: Complete Archon DID toolkit - identity management, verifiable credentials, encrypted messaging (dmail), Nostr integration, file encryption/signing, aliasing, vault management, and encrypted backups. Use for any Archon/DID operations including creating identities, issuing/accepting verifiable credentials, sending encrypted messages between DIDs, deriving Nostr keypairs from DID, encrypting/signing files, managing DID aliases, creating/managing vaults, sharing vaults with multiple DIDs, or backing up to distributed vaults.
+description: Complete Archon DID toolkit - identity management, verifiable credentials, encrypted messaging (dmail), Nostr integration, file encryption/signing, aliasing, vault management, encrypted backups, and authorization (challenge/response). Use for any Archon/DID operations including creating identities, issuing/accepting verifiable credentials, sending encrypted messages between DIDs, deriving Nostr keypairs from DID, encrypting/signing files, managing DID aliases, creating/managing vaults, sharing vaults with multiple DIDs, backing up to distributed vaults, or performing DID-based challenge/response authorization.
 ---
 
 # Archon Keymaster - Complete DID Toolkit
@@ -18,6 +18,7 @@ Comprehensive toolkit for Archon decentralized identities (DIDs). Manages identi
 - **DID Aliasing** - Friendly names for DIDs (contacts, schemas, credentials, vaults)
 - **Vault Management** - Create vaults, add/remove items, manage multi-party access
 - **Vault Backups** - Encrypted, distributed backups of workspace/config/memory
+- **Authorization** - Challenge/response verification between DIDs
 
 ## Prerequisites
 
@@ -761,6 +762,72 @@ Requires `ARCHON_PASSPHRASE` to be set.
 ```bash
 # Run local Archon node, then update ~/.archon.env:
 export ARCHON_GATEKEEPER_URL="http://localhost:4224"
+```
+
+## Authorization
+
+Challenge/response flow for verifying a DID controls its private key. Used for agent-to-agent authentication, access control, and proof-of-identity workflows.
+
+### Create a Challenge
+
+```bash
+# Create a basic challenge
+./scripts/auth/create-challenge.sh
+
+# Create a challenge as a specific DID alias
+./scripts/auth/create-challenge.sh --alias myDID
+
+# Create a challenge from a file
+./scripts/auth/create-challenge.sh challenge-template.json
+
+# Create a challenge tied to a specific credential
+./scripts/auth/create-challenge-cc.sh did:cid:bagaaiera...
+```
+
+Output: a challenge DID (e.g., `did:cid:bagaaiera...`) that the responder must sign.
+
+### Create a Response
+
+```bash
+CHALLENGE="did:cid:bagaaiera..."
+./scripts/auth/create-response.sh "$CHALLENGE"
+```
+
+Output: a response DID containing a signed proof.
+
+### Verify a Response
+
+```bash
+RESPONSE="did:cid:bagaaiera..."
+./scripts/auth/verify-response.sh "$RESPONSE"
+```
+
+Output:
+```json
+{
+    "challenge": "did:cid:...",
+    "credentials": [],
+    "requested": 0,
+    "fulfilled": 0,
+    "match": true,
+    "responder": "did:cid:..."
+}
+```
+
+`match: true` means the response is valid and cryptographically verified.
+
+### Complete Authorization Flow
+
+```bash
+# Challenger creates a challenge
+CHALLENGE=$(./scripts/auth/create-challenge.sh)
+
+# Responder creates a response (proves they control their DID)
+RESPONSE=$(./scripts/auth/create-response.sh "$CHALLENGE")
+
+# Challenger verifies the response
+./scripts/auth/verify-response.sh "$RESPONSE"
+# → {"match": true, "responder": "did:cid:...", ...}
 ```
 
 ## Advanced Usage

@@ -198,6 +198,7 @@ archon-keymaster/
 │   ├── messaging/      # End-to-end encrypted messaging (dmail)
 │   ├── crypto/         # Sign and encrypt files
 │   ├── aliases/        # Friendly names for DIDs
+│   ├── auth/           # Challenge/response authorization
 │   └── backup/         # Vault-based backup/recovery
 ├── references/         # Example configs and templates
 └── SKILL.md           # Complete technical documentation
@@ -262,6 +263,7 @@ All scripts wrap the [@didcid/keymaster](https://github.com/archetech/archon/tre
 - ✅ File signing and encryption
 - ✅ Vault backup/restore
 - ✅ Nostr integration
+- ✅ Authorization (challenge/response verification)
 
 **Coming soon:**
 - 🔜 Permission manifests (skill execution policies)
