@@ -22,18 +22,15 @@ else
     exit 1
 fi
 
-# Check wallet exists
-if [ ! -f ~/clawd/wallet.json ]; then
-    echo "ERROR: No wallet found"
+# Require ARCHON_WALLET_PATH
+if [ -z "$ARCHON_WALLET_PATH" ]; then
+    echo "Error: ARCHON_WALLET_PATH not set in ~/.archon.env"
     exit 1
 fi
 
-# Verify DID exists
-if ! (cd ~/clawd && npx @didcid/keymaster list-dids | grep -q "$DID_NAME"); then
-    echo "ERROR: DID '$DID_NAME' not found in wallet"
-    echo ""
-    echo "Available DIDs:"
-    cd ~/clawd && npx @didcid/keymaster list-dids
+# Check wallet exists
+if [ ! -f "$ARCHON_WALLET_PATH" ]; then
+    echo "ERROR: No wallet found at $ARCHON_WALLET_PATH"
     exit 1
 fi
 
@@ -41,14 +38,12 @@ echo "=== Switching Active DID ==="
 echo ""
 echo "Target: $DID_NAME"
 echo ""
-echo "Note: This updates environment variables for the current session."
-echo "      To persist across sessions, update ~/.archon.env manually."
+
+# Switch active DID (keymaster validates the name exists)
+npx @didcid/keymaster use-id "$DID_NAME"
+
 echo ""
-
-# Set active DID for current session
-export KEYMASTER_ACTIVE_DID="$DID_NAME"
-
 echo "✓ Active DID: $DID_NAME"
 echo ""
-echo "Verify:"
-echo "  npx @didcid/keymaster show-did --name $DID_NAME"
+echo "Note: This updates the wallet. To verify:"
+echo "  npx @didcid/keymaster list-ids"
