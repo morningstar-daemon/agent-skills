@@ -1,6 +1,6 @@
 ---
 name: archon-keymaster
-description: Complete Archon DID toolkit - identity management, verifiable credentials, encrypted messaging (dmail), Nostr integration, file encryption/signing, aliasing, vault management, encrypted backups, authorization (challenge/response), and cryptographic polls. Use for any Archon/DID operations including creating identities, issuing/accepting verifiable credentials, sending encrypted messages between DIDs, deriving Nostr keypairs from DID, encrypting/signing files, managing DID aliases, creating/managing vaults, sharing vaults with multiple DIDs, backing up to distributed vaults, performing DID-based challenge/response authorization, or running cryptographically verifiable polls.
+description: Complete Archon DID toolkit - identity management, verifiable credentials, encrypted messaging (dmail), Nostr integration, file encryption/signing, aliasing, vault management, encrypted backups, authorization (challenge/response), groups, and cryptographic polls. Use for any Archon/DID operations including creating identities, issuing/accepting verifiable credentials, sending encrypted messages between DIDs, deriving Nostr keypairs from DID, encrypting/signing files, managing DID aliases, creating/managing vaults, sharing vaults with multiple DIDs, backing up to distributed vaults, performing DID-based challenge/response authorization, managing DID groups for access control, or running cryptographically verifiable polls.
 ---
 
 # Archon Keymaster - Complete DID Toolkit
@@ -19,6 +19,7 @@ Comprehensive toolkit for Archon decentralized identities (DIDs). Manages identi
 - **Vault Management** - Create vaults, add/remove items, manage multi-party access
 - **Vault Backups** - Encrypted, distributed backups of workspace/config/memory
 - **Authorization** - Challenge/response verification between DIDs
+- **Groups** - Create and manage DID groups for access control and multi-party operations
 - **Polls** - Cryptographic voting with transparent or secret ballots
 
 ## Prerequisites
@@ -678,6 +679,74 @@ Vaults support multi-party access - share vaults with other DIDs.
 ```
 
 **Note:** Members have full read/write access to vault contents. Use `--secret-members` flag when creating the vault if members shouldn't see each other.
+
+## Groups
+
+Manage collections of DIDs for access control, multi-party operations, and organizational structure.
+
+### Create Group
+
+```bash
+./scripts/groups/create-group.sh <group-name>
+```
+
+Creates a group and automatically aliases it by name.
+
+Examples:
+```bash
+./scripts/groups/create-group.sh research-team
+./scripts/groups/create-group.sh archetech-devs
+```
+
+### Add/Remove Members
+
+```bash
+./scripts/groups/add-member.sh <group> <member-did-or-alias>
+./scripts/groups/remove-member.sh <group> <member-did-or-alias>
+```
+
+Examples:
+```bash
+./scripts/groups/add-member.sh research-team did:cid:bagaaiera...
+./scripts/groups/add-member.sh devs alice
+./scripts/groups/remove-member.sh devs alice
+```
+
+### List Groups
+
+```bash
+./scripts/groups/list-groups.sh
+```
+
+Lists all groups owned by your current identity.
+
+### Get Group Details
+
+```bash
+./scripts/groups/get-group.sh <group-did-or-alias>
+```
+
+Shows group metadata and membership.
+
+### Test Membership
+
+```bash
+./scripts/groups/test-member.sh <group> [member]
+```
+
+If member is omitted, tests whether your current identity is in the group.
+
+Examples:
+```bash
+./scripts/groups/test-member.sh research-team           # Am I in this group?
+./scripts/groups/test-member.sh research-team alice     # Is alice in this group?
+```
+
+### Use Cases
+
+- **Access control** - Encrypt files for a group, all members can decrypt
+- **Team management** - Organize DIDs by role or project
+- **Multi-party workflows** - Define who can participate in group operations
 
 ## Vault Backups
 
