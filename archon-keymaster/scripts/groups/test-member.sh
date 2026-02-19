@@ -5,6 +5,19 @@
 
 set -e
 
+# Ensure environment is loaded
+if [ -z "$ARCHON_PASSPHRASE" ]; then
+    if [ -f ~/.archon.env ]; then
+        source ~/.archon.env
+    else
+        echo "Error: ARCHON_PASSPHRASE not set. Run create-id.sh first."
+        exit 1
+    fi
+fi
+
+# Set wallet path
+export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
+
 if [ -z "$1" ]; then
     echo "Usage: $0 <group> [member]"
     echo ""
@@ -20,12 +33,6 @@ fi
 GROUP="$1"
 MEMBER="${2:-}"
 
-# Source environment
-if [ -f ~/.archon.env ]; then
-    source ~/.archon.env
-fi
-export ARCHON_WALLET_PATH="${ARCHON_WALLET_PATH:-$HOME/clawd/wallet.json}"
-
 if [ -z "$MEMBER" ]; then
     echo "Testing if current identity is in group: $GROUP"
 else
@@ -35,4 +42,10 @@ else
 fi
 echo ""
 
-npx @didcid/keymaster test-group "$GROUP" $MEMBER
+# Build args array to handle optional member safely
+args=(test-group "$GROUP")
+if [ -n "$MEMBER" ]; then
+    args+=("$MEMBER")
+fi
+
+npx @didcid/keymaster "${args[@]}"
