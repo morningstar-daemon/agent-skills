@@ -16,6 +16,7 @@ Own your identity. Sign your work. Encrypt your messages. Prove your claims. All
 - 🗄️ **Encrypted vaults** - Distributed backup with multi-party access control
 - 🔑 **Nostr integration** - Same identity across decentralized social networks
 - 🗳️ **Polls** - Cryptographically verifiable voting with secret or transparent ballots
+- 👥 **Groups** - Organize DIDs into groups for access control and team workflows
 
 All built on open standards (W3C DIDs, Verifiable Credentials, secp256k1 cryptography).
 
@@ -201,6 +202,7 @@ archon-keymaster/
 │   ├── aliases/        # Friendly names for DIDs
 │   ├── auth/           # Challenge/response authorization
 │   ├── polls/          # Cryptographic voting
+│   ├── groups/         # DID group management
 │   └── backup/         # Vault-based backup/recovery
 ├── references/         # Example configs and templates
 └── SKILL.md           # Complete technical documentation
@@ -267,6 +269,7 @@ All scripts wrap the [@didcid/keymaster](https://github.com/archetech/archon/tre
 - ✅ Nostr integration
 - ✅ Authorization (challenge/response verification)
 - ✅ Polls (cryptographic voting with transparent or secret ballots)
+- ✅ Groups (organize DIDs for access control and multi-party workflows)
 
 **Coming soon:**
 - 🔜 Permission manifests (skill execution policies)
