@@ -42,10 +42,8 @@ else
 fi
 echo ""
 
-# Build args array to handle optional member safely
-args=(test-group "$GROUP")
 if [ -n "$MEMBER" ]; then
-    args+=("$MEMBER")
+    npx @didcid/keymaster test-group "$GROUP" "$MEMBER"
+else
+    npx @didcid/keymaster test-group "$GROUP"
 fi
-
-npx @didcid/keymaster "${args[@]}"
