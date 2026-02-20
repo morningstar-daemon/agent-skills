@@ -1,27 +1,24 @@
 #!/bin/bash
-# Vote in a poll
+# Add a voter to a poll
 
 set -e
 
 if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "Usage: $0 <poll-did> <vote-index>"
+    echo "Usage: $0 <poll-did> <voter-did>"
     echo ""
-    echo "Cast a vote in a poll"
+    echo "Add a voter to a poll's eligible voter list"
     echo ""
     echo "Arguments:"
-    echo "  poll-did     DID of the poll"
-    echo "  vote-index   Vote number: 0 = spoil, 1-N = option index"
-    echo ""
-    echo "Use view-poll.sh first to see available options and their indices."
+    echo "  poll-did   DID of the poll"
+    echo "  voter-did  DID of the voter to add"
     echo ""
     echo "Example:"
-    echo "  $0 did:cid:bagaaier... 1    # Vote for first option"
-    echo "  $0 did:cid:bagaaier... 0    # Spoil ballot"
+    echo "  $0 did:cid:bagaaier... did:cid:bagaaierb..."
     exit 1
 fi
 
 POLL_DID=$1
-VOTE=$2
+VOTER_DID=$2
 
 # Ensure environment is loaded
 if [ -z "$ARCHON_PASSPHRASE" ]; then
@@ -39,6 +36,6 @@ if [ -z "$ARCHON_WALLET_PATH" ]; then
     exit 1
 fi
 
-# Vote
-echo "Casting vote in poll..."
-npx @didcid/keymaster vote-poll "$POLL_DID" "$VOTE"
+# Add voter
+echo "Adding voter to poll..."
+npx @didcid/keymaster add-poll-voter "$POLL_DID" "$VOTER_DID"

@@ -14,15 +14,16 @@ if [ -z "$1" ]; then
     echo ""
     echo "Generate a template with: create-poll-template.sh > poll.json"
     echo ""
-    echo "Template structure:"
+    echo "Template structure (v2):"
     echo '  {'
-    echo '    "type": "poll",'
-    echo '    "version": 1,'
-    echo '    "description": "Poll question",'
-    echo '    "roster": "DID of eligible voter group",'
+    echo '    "version": 2,'
+    echo '    "name": "poll-name",'
+    echo '    "description": "What is this poll about?",'
     echo '    "options": ["yes", "no", "abstain"],'
     echo '    "deadline": "2026-03-01T00:00:00.000Z"'
     echo '  }'
+    echo ""
+    echo "After creating the poll, add voters with add-poll-voter.sh"
     exit 1
 fi
 
